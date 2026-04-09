@@ -2,6 +2,13 @@
 #include <string>
 using namespace std;
 
+// --- CONSTANTS ---
+const int MAX_PATIENTS = 50;
+const int MAX_LAB_TESTS = 50;
+const int MAX_REQUESTS = 100;
+const int MAX_TECHNICIANS = 20;
+const int MAX_ADMINS = 10;
+
 struct Patient
 {
     string patient_name;
@@ -14,81 +21,81 @@ struct Patient
 
 struct LabTest
 {
-    int testID;
-    string testName;
+    int test_id;
+    string test_name;
     string category;
-    int normalMinValue;
-    int normalMaxvalue;
+    int normal_min_value;
+    int normal_max_value;
     int unit;
 };
 
 struct TestRequest
 {
-    int RequestID;
-    int PatientID;
-    int TestID;
-    int RequestDate;
-    int ResultValue;
+    int request_id;
+    int patient_id;
+    int test_id;
+    int request_date;
+    int result_value;
     string status;
-    bool isAbnormal;
+    bool is_abnormal;
 };
 
 struct LabTechnician
 {
-    int TechnicianID;
-    int technicianPassword;
-    string technician_Name;
-    string technician_UserName;
-    int CompletedTestsCount;
+    int technician_id;
+    int technician_password;
+    string technician_name;
+    string technician_user_name;
+    int completed_tests_count;
 };
 
 struct Admin
 {
-    int AdminID;
-    int Admin_password;
-    string Admin_username;
+    int admin_id;
+    int admin_password;
+    string admin_username;
 };
 
 // المصفوفات والعدادات
-Patient Patients[50];
-int pCount = 0;
+Patient patients[MAX_PATIENTS];
+int p_count = 0;
 
-LabTest labtests[50];
-int labTestCount = 0;
+LabTest lab_tests[MAX_LAB_TESTS];
+int lab_test_count = 0;
 
-TestRequest TestRequests[100];
-int testrequestsCount = 0;
+TestRequest test_requests[MAX_REQUESTS];
+int test_requests_count = 0;
 
-LabTechnician LabTechnicians[20];
-int labtechnicianCount = 0;
+LabTechnician lab_technicians[MAX_TECHNICIANS];
+int lab_technician_count = 0;
 
-Admin admins[10];
-int adminCount = 0;
+Admin admins[MAX_ADMINS];
+int admin_count = 0;
 
 void predefinePatients() {
-    Patients[0].patient_name = "Saif Elwan";
-    Patients[0].patient_username = "saif1";
-    Patients[0].patient_password = 111;
-    Patients[0].patient_age = 19;
-    Patients[0].patient_gender = "male";
-    Patients[0].patient_id = 101;
+    patients[0].patient_name = "Saif Elwan";
+    patients[0].patient_username = "saif1";
+    patients[0].patient_password = 111;
+    patients[0].patient_age = 19;
+    patients[0].patient_gender = "male";
+    patients[0].patient_id = 101;
 
-    Patients[1].patient_name = "Saif Wahdan"; 
-    Patients[1].patient_username = "saif2";
-    Patients[1].patient_password = 222;
-    Patients[1].patient_age = 20;
-    Patients[1].patient_gender = "male";
-    Patients[1].patient_id = 102;
+    patients[1].patient_name = "Saif Wahdan"; 
+    patients[1].patient_username = "saif2";
+    patients[1].patient_password = 222;
+    patients[1].patient_age = 20;
+    patients[1].patient_gender = "male";
+    patients[1].patient_id = 102;
 
-    pCount = 2; 
+    p_count = 2; 
 }
 // دوال تبعي تبدا من هنا 
 // دالة Duplicate للمريض (Username)
 bool isDuplicatePatient(string dublicate_username)
 {
-    for(int i = 0; i < pCount; i++)
+    for(int i = 0; i < p_count; i++)
     {
-        if (dublicate_username == Patients[i].patient_username) // تصحيح حرف P
+        if (dublicate_username == patients[i].patient_username) // تصحيح حرف P
         {
             return true;
         }
@@ -97,11 +104,11 @@ bool isDuplicatePatient(string dublicate_username)
 }
 
 // دالة Duplicate للمريض (ID)
-bool isDuplicatePatient(int dublicate_id)
+bool isDuplicatePatientById(int dublicate_id)
 {
-    for(int i = 0; i < pCount; i++)
+    for(int i = 0; i < p_count; i++)
     {
-        if (dublicate_id == Patients[i].patient_id) 
+        if (dublicate_id == patients[i].patient_id) 
         {
             return true;
         }
@@ -110,11 +117,11 @@ bool isDuplicatePatient(int dublicate_id)
 }
 
 // دالة Duplicate للفني (Username)
-bool isDuplicatetechnician(string dublicate_username)
+bool isDuplicateTechnician(string dublicate_username)
 {
-    for(int i = 0; i < labtechnicianCount; i++)
+    for(int i = 0; i < lab_technician_count; i++)
     {
-        if (dublicate_username == LabTechnicians[i].technician_UserName)
+        if (dublicate_username == lab_technicians[i].technician_user_name)
         {
             return true;
         }
@@ -123,11 +130,11 @@ bool isDuplicatetechnician(string dublicate_username)
 }
 
 // دالة Duplicate للفني (ID)
-bool isDuplicatetechnician(int dublicate_id)
+bool isDuplicateTechnicianById(int dublicate_id)
 {
-    for(int i = 0; i < labtechnicianCount; i++)
+    for(int i = 0; i < lab_technician_count; i++)
     {
-        if (dublicate_id == LabTechnicians[i].TechnicianID) // تصحيح المقارنة بـ ID مش UserName
+        if (dublicate_id == lab_technicians[i].technician_id) // تصحيح المقارنة بـ ID مش UserName
         {
             return true;
         }
@@ -135,23 +142,23 @@ bool isDuplicatetechnician(int dublicate_id)
     return false;
 }
 // function is check duplicate(labtest ) use  (ID)
-bool isDuplicatelabtest(int dublicate_id)
+bool isDuplicateLabTest(int dublicate_id)
 {
-  for(int i=0;i<labTestCount;i++)
+  for(int i=0;i<lab_test_count;i++)
      {
-      if (dublicate_id==labtests[i].testID)
+      if (dublicate_id==lab_tests[i].test_id)
          {
           return true;
          }
      }
      return false;
 }
-bool isDuplicaterequest (int dublicatepatient_id,int dublicatelabtest_id,int RequestDate)
+bool isDuplicateRequest(int dublicate_patient_id,int dublicate_labtest_id,int request_date)
   {
-    for(int i=0;i<testrequestsCount;i++)
+    for(int i=0;i<test_requests_count;i++)
       {
-        if (dublicatepatient_id==TestRequests[i].PatientID&&
-          dublicatelabtest_id==TestRequests[i].TestID&&RequestDate==TestRequests[i].RequestDate)
+        if (dublicate_patient_id==test_requests[i].patient_id&&
+          dublicate_labtest_id==test_requests[i].test_id&&request_date==test_requests[i].request_date)
            {
             return true;
            }
@@ -162,9 +169,9 @@ bool isDuplicaterequest (int dublicatepatient_id,int dublicatelabtest_id,int Req
   int findPatientByUsername(string username_patient)
   {
     
-    for(int i=0;i<pCount;i++)
+    for(int i=0;i<p_count;i++)
       {
-        if (username_patient==Patients[i].patient_username)
+        if (username_patient==patients[i].patient_username)
           {
             return i;
           }
@@ -172,12 +179,12 @@ bool isDuplicaterequest (int dublicatepatient_id,int dublicatelabtest_id,int Req
       return -1 ;
   }
   // return index of Technicians 
-    int findTechnicianByUsername(string username_Technicians)
+    int findTechnicianByUsername(string username_technicians)
   {
     
-    for(int i=0;i<labtechnicianCount;i++)
+    for(int i=0;i<lab_technician_count;i++)
       {
-        if (username_Technicians==LabTechnicians[i].technician_UserName)
+        if (username_technicians==lab_technicians[i].technician_user_name)
           {
             return i;
           }
@@ -185,12 +192,12 @@ bool isDuplicaterequest (int dublicatepatient_id,int dublicatelabtest_id,int Req
       return -1 ;
   }
     // return index of labtest use (ID) 
-      int findlabtestbyid(int labtest_id)
+      int findLabTestById(int labtest_id)
   {
     
-    for(int i=0;i<labTestCount;i++)
+    for(int i=0;i<lab_test_count;i++)
       {
-        if (labtest_id==labtests[i].testID)
+        if (labtest_id==lab_tests[i].test_id)
           {
             return i;
           }
@@ -198,12 +205,12 @@ bool isDuplicaterequest (int dublicatepatient_id,int dublicatelabtest_id,int Req
       return -1 ;
   }
   // return index of request use (ID)
-  int findrequestbyid(int request_id)
+  int findRequestById(int request_id)
     {
     
-    for(int i=0;i<testrequestsCount;i++)
+    for(int i=0;i<test_requests_count;i++)
       {
-        if (request_id==TestRequests[i].RequestID)
+        if (request_id==test_requests[i].request_id)
           {
             return i;
           }
@@ -211,13 +218,13 @@ bool isDuplicaterequest (int dublicatepatient_id,int dublicatelabtest_id,int Req
       return -1 ;
   }
   // function check be Abnarmal
-  bool isResultAbnormal(int test_id ,int Degree_test)
+  bool isResultAbnormal(int test_id ,int degree_test)
   {
-    int index =findlabtestbyid(test_id);
+    int index =findLabTestById(test_id);
     
     if (index>=0)
     {
-      if (labtests[index].normalMinValue>Degree_test||labtests[index].normalMaxvalue<Degree_test)
+      if (lab_tests[index].normal_min_value>degree_test||lab_tests[index].normal_max_value<degree_test)
          {
           return true;
          }
@@ -225,38 +232,38 @@ bool isDuplicaterequest (int dublicatepatient_id,int dublicatelabtest_id,int Req
     return false;
   }
   // set up counter  id to (patient,request,Technicians,labtest) note this counter increment only 
- long long  counteridpatient=100;
- long long  counteridTechnician=1000;
- long long  counteridlabtest=10000;
- long long  counteridrequest=20000;
+long long  counter_id_patient=100;
+long long  counter_id_technician=1000;
+long long  counter_id_labtest=10000;
+long long  counter_id_request=20000;
   //function generate patient id
   
-int generatepatientid()
+int generatePatientId()
 {
-  int newid1=counteridpatient;
-  counteridpatient++;
-  return newid1;
+  int new_id1=counter_id_patient;
+  counter_id_patient++;
+  return new_id1;
 }
   //function generate labtest id
-int generatelabtestid()
+int generateLabTestId()
 {
-  int newid2=counteridlabtest;
-  counteridlabtest++;
-  return newid2;
+  int new_id2=counter_id_labtest;
+  counter_id_labtest++;
+  return new_id2;
 }
   //function generate Technician id
-int generatecounteridTechnicianid()
+int generateTechnicianId()
 {
-  int newid3=counteridTechnician;
-  counteridTechnician++;
-  return newid3;
+  int new_id3=counter_id_technician;
+  counter_id_technician++;
+  return new_id3;
 }
   //function generate request id
-int generaterequestid()
+int generateRequestId()
 {
-  int newid4= counteridrequest;
-  counteridrequest++;
-  return newid4;
+  int new_id4= counter_id_request;
+  counter_id_request++;
+  return new_id4;
 }
 int main()
 {
